@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section class="panel">
+    <div class="heading-row">
+      <div class="branch-stack branch-stack-left">
+        <div class="branch-art long" data-branch="a-long"><img src="branch-a-long.svg" alt="" /></div>
+        <div class="branch-art" data-branch="b"><img src="branch-b.svg" alt="" /></div>
+      </div>
+      <div class="heading-col">
+        <h1 class="curved">
+          <svg viewBox="0 0 1000 240" role="img" aria-label="Ira's Inventory">
+            <path id="curve-up" d="M 20,178 Q 500,38 980,178" fill="none" />
+            <text text-anchor="middle"><textPath href="#curve-up" startOffset="50%">Ira's Inventory</textPath></text>
+          </svg>
+        </h1>
+        <p class="subhead">Hover, tap, equip and explore!</p>
+      </div>
+      <div class="branch-stack branch-stack-right">
+        <div class="branch-art flip long" data-branch="b-long"><img src="branch-b-long.svg" alt="" /></div>
+        <div class="branch-wrap">
+          <div class="branch-art flip" data-branch="a"><img src="branch-a.svg" alt="" /></div>
+          <a class="pigeon-link" href="pigeon.html" aria-label="Meet the pigeon">
+            <img src="pigeon.svg" alt="" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="picnic-zone">
+    <div class="picnic">
+      <img src="picnic.svg" alt="A pink and sky-blue checked picnic mat on the grass" />
+      <a class="mat-item bag" href="#resume" aria-describedby="bag-tip" aria-haspopup="dialog">
+        <img src="bag.svg" alt="A backpack with a rolled-up scroll: my resume" />
+        <span class="tip" id="bag-tip" role="tooltip">My resume, rolled up and ready! Click to equip!</span>
+      </a>
+      <div class="mat-item headphones" tabindex="0" aria-describedby="headphones-tip">
+        <img src="headphones.svg" alt="A pair of blush-white headphones" />
+        <span class="tip" id="headphones-tip" role="tooltip">
+          <span class="tip-bridge"></span>
+          You can spot me with my pink headphones! Here are some of my favorite albums:
+          <span class="album-slides" data-slides>
+            <span class="album-track">
+              <a class="tip-album" href="https://music.apple.com/us/album/nothings-about-to-happen-to-me/1860622550" target="_blank" rel="noopener">
+                <img src="mitski-album.jpg" alt="Album cover of Nothing's About to Happen to Me by Mitski: a white cat with one amber and one blue eye" />
+                <span>Nothing's About to Happen to Me &#8599;</span>
+              </a>
+              <a class="tip-album" href="https://music.apple.com/us/album/beta/1750922465" target="_blank" rel="noopener">
+                <img src="beta-album.jpg" alt="Album cover of BETA by Peter Cat Recording Co." />
+                <span>BETA &#8599;</span>
+              </a>
+              <a class="tip-album" href="https://music.apple.com/us/album/titanic-rising/1450550344" target="_blank" rel="noopener">
+                <img src="titanic-rising-album.jpg" alt="Album cover of Titanic Rising by Weyes Blood" />
+                <span>Titanic Rising &#8599;</span>
+              </a>
+            </span>
+            <span class="album-nav">
+              <button type="button" class="album-prev" aria-label="Previous album">&lsaquo;</button>
+              <button type="button" class="album-next" aria-label="Next album">&rsaquo;</button>
+            </span>
+          </span>
+        </span>
+      </div>
+      <a class="mat-item notebooks" href="writing.html" aria-describedby="notebooks-tip">
+        <img src="notebooks.svg" alt="A ruled spiral journal with a pencil lying across it" />
+        <span class="tip" id="notebooks-tip" role="tooltip">Journal and pencil, essential to my writing! I'm a student journalist, and I love doing poetry too.<span class="tip-line">Click to read more!</span></span>
+      </a>
+      <a class="mat-item laptop" href="about.html" aria-describedby="laptop-tip">
+        <img src="laptop.svg" alt="A closed MacBook Air covered in stickers" />
+        <span class="tip" id="laptop-tip" role="tooltip">My trusty laptop, covered in stickers of things I love! It's my window to the world, and helps me to learn, reflect and grow!<span class="tip-line">Click to learn more about me and my work!</span></span>
+      </a>
+      <a class="mat-item mic" href="https://open.spotify.com/show/5tEr04qU3PT0iAWezpAABd?si=b157949c17004581" target="_blank" rel="noopener" aria-describedby="mic-tip">
+        <img src="mic.svg" alt="A black podcast microphone on a round stand" />
+        <span class="tip" id="mic-tip" role="tooltip">Podcast Mic, to capture ideas out loud! Since 2022, I have been hosting a podcast on intersectional feminism and feminist philosophy.<span class="tip-line">Click to visit my Spotify page!</span></span>
+      </a>
+      <a class="mat-item sketchbook" href="https://houseatelier.wixsite.com/website/projects-7" target="_blank" rel="noopener" aria-describedby="sketchbook-tip">
+        <img src="sketchbook.svg" alt="A spiral sketchbook with an eagle on the cover, and a fan of colored pencils beside it" />
+        <span class="tip" id="sketchbook-tip" role="tooltip">I am also an artist! Pencil portraits are central to my practice, but I also explore acrylic and mixed media artworks.<span class="tip-line">Click to see some of my works!</span></span>
+      </a>
+      <button class="flower" type="button" aria-label="A daisy: press it to send the bees flying" style="left:15.645%;top:16.146%;width:2.903%;height:9.375%"></button>
+      <button class="flower" type="button" aria-label="A daisy: press it to send the bees flying" style="left:22.258%;top:67.708%;width:2.581%;height:8.333%"></button>
+      <button class="flower" type="button" aria-label="A daisy: press it to send the bees flying" style="left:61.129%;top:2.604%;width:2.258%;height:7.292%"></button>
+      <button class="flower" type="button" aria-label="A daisy: press it to send the bees flying" style="left:91.129%;top:39.062%;width:2.903%;height:9.375%"></button>
+      <button class="flower" type="button" aria-label="A daisy: press it to send the bees flying" style="left:67.097%;top:77.083%;width:2.581%;height:8.333%"></button>
+      <div class="mat-items"></div>
+    </div>
+
+    <div class="grass-extra grass-bl">
+      <img src="grass-bl.svg" alt="" />
+      <button class="flower" type="button" aria-label="A daisy: press it to send the bees flying" style="left:19.231%;top:23.077%;width:30.769%;height:30.769%"></button>
+    </div>
+    <div class="grass-extra grass-br">
+      <img src="grass-br.svg" alt="" />
+      <button class="flower" type="button" aria-label="A daisy: press it to send the bees flying" style="left:13.462%;top:25%;width:26.923%;height:26.923%"></button>
+    </div>
+    <img class="grass-extra grass-m1" src="grass-m1.svg" alt="" />
+    <div class="grass-extra grass-m2">
+      <img src="grass-m2.svg" alt="" />
+      <button class="flower" type="button" aria-label="A daisy: press it to send the bees flying" style="left:32.692%;top:40.385%;width:26.923%;height:26.923%"></button>
+    </div>
+    <img class="grass-extra grass-l" src="grass-l.svg" alt="" />
+    </div>
+    <footer class="site-footer">Ira Satpathy &copy; 2026</footer>
+  </section>
+
+  <div class="modal" id="resume-modal" role="dialog" aria-modal="true" aria-labelledby="resume-title" hidden>
+    <div class="modal-box about-card">
+      <button class="modal-close" type="button" aria-label="Close">&times;</button>
+      <img class="modal-icon" src="bag.svg" alt="" />
+      <h2 id="resume-title">Want a copy of my resume?</h2>
+      <p>Password please? Just kidding! Pop in your email and I'll send it your way!</p>
+      <form class="msg-form" id="resume-form" novalidate>
+        <label class="sr-only" for="resume-email">Your email</label>
+        <input id="resume-email" name="email" type="email" maxlength="200" placeholder="Your email" autocomplete="email" required />
+        <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="msg-send" type="submit">Send it to me</button>
+        <p class="msg-status" id="resume-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+  <script src="branches.js"></script>
+  <script src="ruffle.js"></script>
+  <script src="tips.js"></script>
+  <script src="resume-modal.js"></script>
+  <script src="contact.js"></script>
+  <script src="bees.js"></script>
+</body>
+</html>

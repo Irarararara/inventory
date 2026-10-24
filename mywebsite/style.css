@@ -1,0 +1,1147 @@
+:root {
+  --bg: #faf7f2;
+  --surface: #ffffff;
+  --text: #2b2620;
+  --muted: #787064;
+  --border: #e7e0d5;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-snap-type: y proximity;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.panel {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* content starts at the top of the page */
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.panel:nth-child(odd) {
+  background: #9ab16d;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin: 0 0 32px;
+}
+
+/* Spans the full page width (cancels the panel's 20px side padding) so the
+   branches grow in from the very edges, at any window size. */
+.heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: calc(100% + 40px);
+}
+
+/* The heading, in the middle between the two branch stacks. */
+.heading-col {
+  flex: 0 1 940px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* The picnic mat, with its grass, in the lower middle of the page. It is drawn on the same pixel grid as
+   the branches; --p is the on-screen size of one drawn pixel. The page pushes it to the bottom. */
+.picnic {
+  --p: clamp(2px, 0.32vw, 5px);
+  position: relative;
+  width: min(100vw, calc(310 * var(--p)));
+  margin-top: auto;
+  margin-bottom: clamp(16px, 4vh, 48px); /* a little air under it, so it sits lower-middle rather than on the edge */
+}
+
+/* Things lying on the mat, placed after the sketch. Sizes are fractions of the picnic sprite (310 x 96 drawn
+   pixels), so they stay on the same pixel grid as the mat. */
+.mat-item {
+  display: block;
+  position: absolute;
+  line-height: 0;
+  outline: none;
+  transition: transform 0.12s steps(2);
+}
+
+.mat-item > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.mat-item.bag {
+  width: calc(58 / 310 * 100%);
+  left: calc(70 / 310 * 100%);
+  top: calc(3 / 96 * 100%);
+}
+
+.mat-item.headphones {
+  width: calc(34 / 310 * 100%);
+  left: calc(125 / 310 * 100%);
+  top: calc(24 / 96 * 100%);
+}
+
+.mat-item.laptop {
+  width: calc(52 / 310 * 100%);
+  left: calc(118 / 310 * 100%);
+  top: calc(49 / 96 * 100%);
+}
+
+.mat-item.notebooks {
+  width: calc(36 / 310 * 100%);
+  left: calc(158 / 310 * 100%);
+  top: calc(25 / 96 * 100%);
+}
+
+.mat-item.mic {
+  width: calc(28 / 310 * 100%);
+  left: calc(204 / 310 * 100%);
+  top: calc(4 / 96 * 100%);
+}
+
+.mat-item.sketchbook {
+  width: calc(48 / 310 * 100%);
+  left: calc(172 / 310 * 100%);
+  top: calc(43 / 96 * 100%);
+}
+
+/* Hovering (or tabbing to) an item lifts it with a white edge, like the pigeon, and shows its note. */
+.mat-item:focus-visible,
+.mat-item.is-open {
+  transform: translateY(-6px);
+  z-index: 2;
+}
+
+.mat-item:focus-visible > img,
+.mat-item.is-open > img {
+  filter: drop-shadow(0 0 0 #fff) drop-shadow(0 3px 0 rgba(0, 0, 0, 0.25));
+}
+
+/* Real hover only where there is a mouse: on a phone a first tap opens the note (tips.js), a second follows the link */
+@media (hover: hover) {
+  .mat-item:hover {
+    transform: translateY(-6px);
+    z-index: 2;
+  }
+
+  .mat-item:hover > img {
+    filter: drop-shadow(0 0 0 #fff) drop-shadow(0 3px 0 rgba(0, 0, 0, 0.25));
+  }
+
+  .mat-item:hover .tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+  }
+}
+
+/* The little dialogue box: a pixel-edged cream note with a tail pointing down at the item. */
+.tip {
+  position: absolute;
+  left: calc(50% + var(--sx, 0px));
+  bottom: calc(100% + 14px);
+  width: max-content;
+  max-width: 240px;
+  padding: 8px 12px;
+  background: #f7f4d5;
+  color: #105666;
+  border: 3px solid #33283a;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+  font-family: 'Pangolin', 'Segoe Script', cursive;
+  font-size: 17px;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+  text-decoration: none;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.12s steps(2), transform 0.12s steps(2);
+}
+
+.tip::before,
+.tip::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - var(--sx, 0px));
+  top: 100%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  transform: translateX(-50%);
+}
+
+.tip::before {
+  border-width: 11px 9px 0;
+  border-color: #33283a transparent transparent;
+}
+
+.tip::after {
+  margin-top: -3px;
+  border-width: 8px 6px 0;
+  border-color: #f7f4d5 transparent transparent;
+}
+
+.mat-item.is-open .tip,
+.mat-item:focus-visible .tip,
+.mat-item:focus-within .tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;   /* so a link inside the note can be clicked */
+}
+
+/* When there is no room above the item (a short window), tips.js puts the note underneath, tail pointing up */
+.mat-item.tip-below .tip {
+  bottom: auto;
+  top: calc(100% + 14px);
+}
+
+.mat-item.tip-below .tip::before,
+.mat-item.tip-below .tip::after {
+  top: auto;
+  bottom: 100%;
+}
+
+.mat-item.tip-below .tip::before {
+  border-width: 0 9px 11px;
+  border-color: transparent transparent #33283a;
+}
+
+.mat-item.tip-below .tip::after {
+  margin-top: 0;
+  margin-bottom: -3px;
+  border-width: 0 6px 8px;
+  border-color: transparent transparent #f7f4d5;
+}
+
+.mat-item.tip-below .tip-bridge {
+  top: auto;
+  bottom: 100%;
+}
+
+/* An invisible strip across the gap between the note and the item, so the mouse can travel up to the note. */
+.tip-bridge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 20px;
+}
+
+/* The album card inside a note: the cover with its title underneath, linking out. */
+.tip-album {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tip-album img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border: 3px solid #33283a;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.tip-album span {
+  font-size: 13px;
+  white-space: nowrap;
+  text-decoration: underline;
+}
+
+.tip-album:hover span,
+.tip-album:focus-visible span {
+  color: #b04a76;
+}
+
+.tip-line {
+  display: block;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+/* The About page: a cream card with the pixel-style border and shadow used on the notes */
+.panel-about {
+  padding-top: clamp(32px, 8vh, 96px);
+}
+
+.about-card {
+  width: min(90vw, 680px);
+  margin: 12px 0 24px;
+  padding: 28px 32px;
+  background: #f7f4d5;
+  color: #105666;
+  border: 4px solid #33283a;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.25);
+  font-family: 'Pangolin', 'Segoe Script', cursive;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.about-card h2 {
+  margin: 0 0 6px;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.about-card p {
+  margin: 0 0 20px;
+}
+
+.about-card .about-links {
+  margin: 0;
+}
+
+.about-card a {
+  color: inherit;
+}
+
+/* The About card with my photo on the right: a square cut from the middle of the picture, in a double pixel frame */
+.about-split {
+  display: flex;
+  align-items: flex-start;
+  gap: 36px;
+}
+
+.about-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.about-photo {
+  flex: 0 0 clamp(180px, 30%, 240px);
+  aspect-ratio: 1;
+  margin: 10px 10px 10px 0;
+  background: #f4b4ca url("mypic.jpg") no-repeat;
+  background-size: 148% auto;
+  background-position: 21% 57.5%;
+  border: 4px solid #f7f4d5;
+  box-shadow: 0 0 0 4px #33283a, 0 0 0 10px #f4b4ca, 0 0 0 14px #33283a, 8px 8px 0 14px rgba(0, 0, 0, 0.25);
+}
+
+/* On a narrow card the photo goes on top, centred */
+@media (max-width: 620px) {
+  .about-split {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .about-photo {
+    flex-basis: auto;
+    width: min(48%, 165px);
+    margin: 14px 0 0;
+  }
+}
+
+/* The flowers' click targets (invisible), and the bees that fly out of them */
+.flower {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.flower:focus-visible {
+  outline: 2px dashed #f7f4d5;
+  outline-offset: 2px;
+}
+
+.grass-extra > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.bee-flight {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  line-height: 0;
+  will-change: transform, opacity;
+}
+
+.bee-flight .bee {
+  display: block;
+  image-rendering: pixelated;
+}
+
+.bee .f1 { animation: flap-a 0.16s steps(1, end) infinite; }
+.bee .f2 { animation: flap-b 0.16s steps(1, end) infinite; }
+
+@keyframes flap-a {
+  0%   { opacity: 1; }
+  50%  { opacity: 0; }
+}
+
+@keyframes flap-b {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bee .f1, .bee .f2 { animation: none; }
+  .bee .f2 { opacity: 0; }
+}
+
+/* Three extra grass tufts out on the page itself, in the bottom corners and at the left edge */
+.panel:has(.grass-extra) {
+  position: relative;
+}
+
+.grass-extra {
+  position: absolute;
+  width: calc(26 * var(--gp, clamp(2px, 0.32vw, 5px)));
+  height: auto;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.grass-bl { left: 2%; bottom: 9%; }
+.grass-br { right: 2%; bottom: 9%; }
+.grass-m1 { left: 29%; bottom: 6%; }
+.grass-m2 { left: 54%; bottom: 6%; }
+.grass-l { left: 1%; bottom: 32%; }
+
+.picnic > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+/* Reserved for whatever goes on the mat later: covers the middle of the mat and is empty for now. */
+.mat-items {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 32%;
+  height: 40%;
+  pointer-events: none;   /* empty for now, and it must not block clicks on the items beneath it */
+}
+
+/* The two stacks of branches at the left and right edges, beside the sentence. */
+.branch-stack {
+  flex: 0 0 clamp(70px, 17vw, 250px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.branch-stack-left {
+  align-items: flex-start;
+}
+
+.branch-stack-right {
+  align-items: flex-end;
+}
+
+/* Each branch lives in a .branch-art wrapper: it holds a plain picture at first, and ruffle.js swaps
+   in the version whose leaves can move. */
+.branch-art {
+  display: block;
+  width: 100%;
+}
+
+.branch-art > img,
+.branch-art > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.branch-art > svg {
+  cursor: pointer;
+}
+
+/* The top branches are 80 pixels wide against the lower ones' 64, so they keep the same pixel
+   size and simply reach a quarter further: both top branches match, and both stop short of the sentence. */
+.branch-art.long {
+  width: 125%;
+  max-width: none;
+}
+
+.branch-art.flip {
+  transform: scaleX(-1);
+}
+
+/* Ruffling: each leaf swings around the point where it joins its stem, then settles. The delay
+   (set by ruffle.js) grows with distance from the click, so the shake ripples outward. */
+.branch-art .leaf {
+  transform-box: view-box;
+}
+
+.branch-art .leaf.ruffling {
+  animation: ruffle 0.8s ease-in-out var(--delay, 0ms) 1 both;
+}
+
+@keyframes ruffle {
+  0%   { transform: rotate(0deg); }
+  15%  { transform: rotate(calc(var(--amp) * 1deg)); }
+  35%  { transform: rotate(calc(var(--amp) * -0.8deg)); }
+  55%  { transform: rotate(calc(var(--amp) * 0.5deg)); }
+  75%  { transform: rotate(calc(var(--amp) * -0.25deg)); }
+  100% { transform: rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .branch-art .leaf.ruffling {
+    animation: none;
+  }
+}
+
+/* The pigeon is perched on the bottom-right branch; its position is a
+   percentage of the branch sprite so it stays put as the branch scales. */
+.branch-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.pigeon-link {
+  position: absolute;
+  left: 20%;
+  bottom: 64.5%;
+  width: 37.5%;
+  line-height: 0;
+  transition: transform 0.12s steps(2);
+}
+
+.pigeon-link img {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.pigeon-link:hover,
+.pigeon-link:focus-visible {
+  transform: translateY(-6px);
+  outline: none;
+  filter: drop-shadow(0 0 0 #fff) drop-shadow(0 3px 0 rgba(0, 0, 0, 0.25));
+}
+
+/* The pigeon's own page: content starts near the top instead of being centred */
+.panel-pigeon,
+.panel-foliage {
+  position: relative;
+  overflow: hidden;
+  justify-content: flex-start;
+  padding-top: clamp(32px, 8vh, 96px);
+}
+
+/* Curved, slanted branches: a fan of three sweeping out of each corner, plus S-shaped branches
+   down the sides, all behind the content. --px is the on-screen size of one drawn pixel,
+   matching the branches on the main page. */
+.foliage {
+  --px: clamp(2px, 0.27vw, 4px);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.foliage .fo {
+  position: absolute;
+  width: calc(var(--w) * var(--px));
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.foliage .fo-l {
+  left: 0;
+}
+
+.foliage .fo-r {
+  right: 0;
+}
+
+.foliage .fig,
+.foliage .bloom {
+  position: absolute;
+  width: calc(12 * var(--px));
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.panel-pigeon > :not(.foliage),
+.panel-foliage > :not(.foliage) {
+  position: relative;
+  z-index: 1;
+}
+
+/* The top-corner fans would run into the heading's first and last letters on mid-size windows */
+@media (max-width: 1300px) {
+  .foliage .top {
+    display: none;
+  }
+}
+
+/* On phones keep just the bottom-corner fans, which sit clear of the heading, scroll and pigeon */
+@media (max-width: 800px) {
+  .foliage .fo:not(.bottom),
+  .foliage .fig:not(.bottom),
+  .foliage .bloom:not(.bottom) {
+    display: none;
+  }
+}
+
+/* The writing page's heading is short, so its top-corner fans fit at every width: keep them on small screens too */
+.panel-foliage .foliage .fo.top,
+.panel-foliage .foliage .fig.top,
+.panel-foliage .foliage .bloom.top {
+  display: block;
+}
+
+/* ...a little smaller on phones, so they stay clear of the heading */
+@media (max-width: 500px) {
+  .panel-foliage .foliage .fo.top,
+  .panel-foliage .foliage .fig.top,
+  .panel-foliage .foliage .bloom.top {
+    --px: 1.45px;
+  }
+}
+
+/* container-type lets the text inside scale with the scroll's own width */
+.scroll-wrap {
+  position: relative;
+  container-type: inline-size;
+  width: min(90vw, 650px);
+  margin: 8px 0 12px;
+}
+
+.scroll {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.15));
+}
+
+/* sits on the open parchment between the two rolls, centred */
+.scroll-text {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: 29%;
+  bottom: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Pangolin', 'Segoe Script', cursive;
+  font-size: 22px;
+  font-size: clamp(13px, 3cqw, 22px);
+  line-height: 1.3;
+  color: #3a2a14;
+}
+
+.scroll-text p {
+  margin: 0;
+}
+
+.scroll-label {
+  font-size: 1.1em;
+}
+
+.scroll-email {
+  font-size: 0.82em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  overflow-wrap: anywhere;
+}
+
+.scroll-email a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.scroll-email a:hover,
+.scroll-email a:focus-visible {
+  text-decoration: underline;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* the message form on the scroll */
+.msg-form {
+  width: 100%;
+  margin: 0.3em 0 0.4em;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.3em;
+}
+
+.msg-form textarea,
+.msg-form input[type="email"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.25em 0.45em;
+  font: inherit;
+  font-size: 0.8em;
+  line-height: 1.2;
+  color: #3a2a14;
+  background: #fff9e6;
+  border: 3px solid #3a2a14;
+  border-radius: 0;
+  outline: none;
+  resize: none;
+}
+
+.msg-form textarea {
+  height: 3.6em;
+}
+
+.msg-form textarea::placeholder,
+.msg-form input::placeholder {
+  color: #a08a5c;
+}
+
+.msg-form textarea:focus,
+.msg-form input[type="email"]:focus {
+  background: #ffffff;
+  box-shadow: 3px 3px 0 rgba(58, 42, 20, 0.3);
+}
+
+.msg-send {
+  align-self: center;
+  padding: 0.1em 1.3em;
+  font: inherit;
+  font-size: 0.85em;
+  color: #fff4d6;
+  background: #7a5a2e;
+  border: 3px solid #3a2a14;
+  border-radius: 0;
+  box-shadow: 3px 3px 0 rgba(58, 42, 20, 0.35);
+  cursor: pointer;
+}
+
+.msg-send:hover,
+.msg-send:focus-visible {
+  background: #946d38;
+  outline: none;
+}
+
+.msg-send:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(58, 42, 20, 0.35);
+}
+
+.msg-send:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.msg-status {
+  min-height: 1.1em;
+  margin: 0;
+  font-size: 0.72em;
+}
+
+.msg-status.good { color: #2f6a2a; }
+.msg-status.bad { color: #9a3b2e; }
+
+.scroll-icon {
+  flex: none;
+  height: 1.2em;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.pigeon-hero {
+  width: clamp(120px, 20vw, 220px);
+  height: auto;
+  margin: 0 0 16px;
+  image-rendering: pixelated;
+}
+
+h1.page-title {
+  font-family: 'Pangolin', 'Segoe Script', cursive;
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  color: #f7f4d5;
+  text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.2);
+  margin: 0 0 12px;
+}
+
+.back-link {
+  position: relative;
+  z-index: 5;   /* always above the branches, the fruit and the footer line */
+  padding: 6px 10px;
+  font-family: 'Pangolin', 'Segoe Script', cursive;
+  font-size: 1.3rem;
+  color: #f7f4d5;
+  cursor: pointer;
+}
+
+h1.curved {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: 16px 0;
+}
+
+.heading-col h1.curved {
+  width: 100%;
+  margin: 16px 0;
+}
+
+.heading-col h1.curved text {
+  font-size: 100px;
+}
+
+.subhead {
+  margin: calc(-22px - 4.2vw) 0 0;
+  font-family: 'Pangolin', 'Segoe Script', cursive;
+  font-size: clamp(1rem, 1.7vw, 1.5rem);
+  color: #f7f4d5;
+  text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+h1.curved svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(2px 3px 3px rgba(0, 0, 0, 0.2));
+}
+
+h1.curved text {
+  font-family: 'Pangolin', 'Segoe Script', cursive;
+  font-size: 84px;
+  font-weight: 400;
+  fill: #f7f4d5;
+  stroke: #f7f4d5;
+  stroke-width: 1px;
+}
+
+
+/* Phones, and any clearly tall, narrow window: the picnic is drawn wider than the screen (its sides are just grass) so the mat and the things on it
+   are big enough to see, and it sits in the middle of the space under the heading. On wider screens the wrapper
+   is invisible to the layout. */
+.picnic-zone {
+  display: contents;
+}
+
+@media (max-width: 700px), (max-aspect-ratio: 4/5) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .picnic-zone {
+    display: block;
+    position: relative;
+    flex: none;
+    width: 140vw;
+    margin: auto 0 8vh;
+    --gp: calc(140vw / 310);
+  }
+
+  .picnic {
+    width: 100%;
+    margin: 0;
+  }
+
+  /* the title takes the full width and the two branch stacks (with the dove) hang underneath it */
+  .heading-row {
+    flex-wrap: wrap;
+    row-gap: 20px;
+  }
+
+  .heading-col {
+    order: -1;
+    flex: 0 0 100%;
+    padding: 0 20px;
+  }
+
+  .branch-stack {
+    flex: 0 0 34%;
+    gap: 26px;
+  }
+
+  .heading-col h1.curved text {
+    font-size: 140px;
+  }
+
+  .subhead {
+    margin-top: calc(-22px - 3vw);
+    font-size: 1.15rem;
+  }
+
+  /* the two sentences go on their own lines */
+  .subhead .sub-2 {
+    display: block;
+  }
+
+  .tip {
+    max-width: min(240px, 62vw);
+    font-size: 16px;
+  }
+
+  /* keep the loose grass tucked in just below the mat */
+  .grass-m1,
+  .grass-m2 {
+    bottom: 11%;
+  }
+
+  .grass-bl {
+    left: 14%;
+    bottom: 5%;
+  }
+
+  .grass-br {
+    right: 14%;
+    bottom: 5%;
+  }
+}
+
+/* A small copyright line along the bottom edge of every page */
+.panel > .site-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  z-index: 1;
+  margin: 0;
+  font-family: 'Pangolin', 'Segoe Script', cursive;
+  font-size: 14px;
+  font-weight: 400;
+  color: #2c6a2a;
+  text-align: center;
+  text-shadow: 0 0 3px #9ab16d, 0 0 3px #9ab16d, 0 0 6px #9ab16d;   /* keeps it readable where branches pass behind it */
+  pointer-events: none;
+}
+
+.panel {
+  position: relative;
+}
+
+/* The resume request card: a roomier form than the one on the scroll */
+.resume-card .msg-form {
+  gap: 12px;
+  margin: 8px 0 0;
+}
+
+.resume-card .msg-status {
+  margin: 0;
+  text-align: center;
+}
+
+/* The resume box: opens over the main page, covering about three quarters of it */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 40, 20, 0.55);
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
+.modal-box {
+  position: relative;
+  width: 75vw;
+  height: 75vh;
+  max-height: 90vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.modal-box h2 {
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  margin-bottom: 10px;
+}
+
+.modal-box p {
+  margin-bottom: 18px;
+}
+
+.modal-box .msg-form {
+  width: min(100%, 520px);
+  gap: 14px;
+}
+
+.modal-box .msg-status {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 0.85em;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  font: inherit;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #fff4d6;
+  background: #7a5a2e;
+  border: 3px solid #3a2a14;
+  border-radius: 0;
+  box-shadow: 3px 3px 0 rgba(58, 42, 20, 0.35);
+  cursor: pointer;
+}
+
+.modal-close:hover,
+.modal-close:focus-visible {
+  background: #946d38;
+  outline: none;
+}
+
+.modal-close:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(58, 42, 20, 0.35);
+}
+
+@media (max-width: 700px) {
+  .modal-box {
+    width: 88vw;
+    height: auto;
+    min-height: 50vh;
+    padding: 56px 22px 28px;
+  }
+}
+
+.modal-icon {
+  display: block;
+  width: clamp(72px, 9vw, 116px);
+  height: auto;
+  margin-bottom: 14px;
+  image-rendering: pixelated;
+}
+
+/* Album slideshow inside the headphones note: the arrows (or a swipe) slide between the covers */
+.album-slides {
+  display: block;
+  position: relative;
+  width: 210px;
+  max-width: 100%;
+  margin: 8px auto 0;
+}
+
+.album-track {
+  display: flex;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.album-track .tip-album {
+  flex: 0 0 100%;
+  margin-top: 0;
+  transform: translateX(calc(var(--i, 0) * -100%));
+  transition: transform 0.25s steps(5);
+}
+
+.album-track .tip-album span {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* the arrows sit in the margins beside the cover, each with a roomy click area */
+.album-nav button {
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 96px;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 28px;
+  line-height: 96px;
+  text-align: center;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.album-nav .album-prev { left: 0; }
+.album-nav .album-next { right: 0; }
+.album-nav button:hover,
+.album-nav button:focus-visible { color: #b04a76; outline: none; }
+.album-nav button:active { transform: scale(0.9); }
+
+.album-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.album-dots i {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: #b9c9a0;
+  border: 2px solid #33283a;
+}
+
+.album-dots i.on {
+  background: #b04a76;
+}
+
+/* LinkedIn link on the About card: the logo sits in front of the words */
+.about-card .about-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

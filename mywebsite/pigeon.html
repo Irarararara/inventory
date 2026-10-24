@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Pigeon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section class="panel panel-pigeon">
+    <div class="foliage" aria-hidden="true">
+      <img class="fo fo-l top" src="fb-l-top.svg" alt="" style="--w:84;top:0" />
+      <img class="fo fo-l" src="fb-l-1.svg" alt="" style="--w:58;top:22%" />
+      <img class="fo fo-l" src="fb-l-2.svg" alt="" style="--w:70;top:37%" />
+      <img class="fo fo-l" src="fb-l-3.svg" alt="" style="--w:52;top:53%" />
+      <img class="fo fo-l bottom" src="fb-l-bot.svg" alt="" style="--w:100;bottom:0" />
+      <img class="fo fo-r top" src="fb-r-top.svg" alt="" style="--w:80;top:0;transform:scaleX(-1)" />
+      <img class="fo fo-r" src="fb-r-1.svg" alt="" style="--w:62;top:19%;transform:scaleX(-1)" />
+      <img class="fo fo-r" src="fb-r-2.svg" alt="" style="--w:50;top:35%;transform:scaleX(-1)" />
+      <img class="fo fo-r" src="fb-r-3.svg" alt="" style="--w:64;top:51%;transform:scaleX(-1)" />
+      <img class="fo fo-r bottom" src="fb-r-bot.svg" alt="" style="--w:104;bottom:0;transform:scaleX(-1)" />
+    </div>
+    <h1 class="page-title">Questions? Coo! Pigeon knows the way!</h1>
+    <div class="scroll-wrap">
+      <img class="scroll" src="scroll.svg" alt="An open scroll" />
+      <div class="scroll-text">
+        <p class="scroll-label">Send a message</p>
+        <form class="msg-form" id="msg-form" novalidate>
+          <label class="sr-only" for="msg-text">Your message</label>
+          <textarea id="msg-text" name="message" rows="3" maxlength="1000" placeholder="Write your message here..." required></textarea>
+          <label class="sr-only" for="msg-email">Your email, so I can reply</label>
+          <input id="msg-email" name="email" type="email" maxlength="200" placeholder="Your email" autocomplete="email" required />
+          <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button class="msg-send" type="submit">Send</button>
+          <p class="msg-status" id="msg-status" role="status" aria-live="polite"></p>
+        </form>
+        <p class="scroll-email">
+          <img class="scroll-icon" src="linkedin.svg" alt="LinkedIn" />
+          <a href="https://linkedin.com/in/ira-satpathy" target="_blank" rel="noopener noreferrer">linkedin.com/in/ira-satpathy</a>
+        </p>
+      </div>
+    </div>
+    <img class="pigeon-hero" src="pigeon.svg" alt="A small white pixel-art pigeon" />
+    <a class="back-link" href="index.html">&larr; Back to the inventory</a>
+    <footer class="site-footer">Ira Satpathy &copy; 2026</footer>
+  </section>
+  <script src="contact.js"></script>
+</body>
+</html>
