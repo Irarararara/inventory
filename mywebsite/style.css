@@ -13,12 +13,13 @@
 
 html {
   scroll-snap-type: y proximity;
+  background: #a5bf74;   /* green behind the page, so the phone's top and bottom bars and overscroll show green */
 }
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  background: var(--bg);
+  background: #a5bf74;
   color: var(--text);
 }
 
@@ -1229,4 +1230,40 @@ h1.curved text {
 /* My Art: the same cream box as the other pages, empty for now, tall enough to show where the art will go */
 .panel-fixed .art-card {
   flex-basis: min(60vh, 460px);   /* a good tall box, shrinking only if the screen is short */
+}
+
+/* A thin scroll bar for touch screens, drawn by scrollbar.js, since phones hide the real one */
+.touch-scroll-track {
+  position: fixed;
+  width: 10px;
+  display: none;
+  background: #efe9c4;
+  border-left: 2px solid #33283a;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.touch-scroll-thumb {
+  width: 100%;
+  background: #c9b27a;
+  border: 2px solid #33283a;
+  border-left: 0;
+}
+
+/* On phones the copyright line sits in the flow under the back link, on a green patch, instead of floating over the branches */
+@media (max-width: 600px) {
+  .panel-foliage > .site-footer,
+  .panel-pigeon > .site-footer {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    flex: none;
+    margin: 0 0 8px;
+    padding: 3px 12px;
+    background: #a5bf74;
+    font-size: 12px;
+    color: #1f4f1d;
+    text-shadow: none;
+  }
 }
