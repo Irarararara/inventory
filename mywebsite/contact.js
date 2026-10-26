@@ -2,7 +2,7 @@
 // that emails each submission. To switch it on: get a free access key at https://web3forms.com (type the inbox
 // address, the key arrives by email) and paste it between the quotes below.
 (function () {
-  var ACCESS_KEY = '';
+  var ACCESS_KEY = '7940bab4-07ea-45ec-9ded-5b8688312172';
 
   var ENDPOINT = 'https://api.web3forms.com/submit';
 
