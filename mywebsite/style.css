@@ -34,7 +34,7 @@ body {
 }
 
 .panel:nth-child(odd) {
-  background: #9ab16d;
+  background: #a5bf74;
 }
 
 h1 {
@@ -543,10 +543,25 @@ h1 {
 }
 
 .pigeon-link:hover,
-.pigeon-link:focus-visible {
+.pigeon-link:focus-visible,
+.pigeon-link.is-open {
   transform: translateY(-6px);
   outline: none;
+  z-index: 2;
+}
+
+/* the white edge goes on the bird only, not on its note */
+.pigeon-link:hover img,
+.pigeon-link:focus-visible img,
+.pigeon-link.is-open img {
   filter: drop-shadow(0 0 0 #fff) drop-shadow(0 3px 0 rgba(0, 0, 0, 0.25));
+}
+
+.pigeon-link:hover .tip,
+.pigeon-link:focus-visible .tip,
+.pigeon-link.is-open .tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 /* The pigeon's own page: content starts near the top instead of being centred */
@@ -949,7 +964,7 @@ h1.curved text {
   font-weight: 400;
   color: #2c6a2a;
   text-align: center;
-  text-shadow: 0 0 3px #9ab16d, 0 0 3px #9ab16d, 0 0 6px #9ab16d;   /* keeps it readable where branches pass behind it */
+  text-shadow: 0 0 3px #a5bf74, 0 0 3px #a5bf74, 0 0 6px #a5bf74;   /* keeps it readable where branches pass behind it */
   pointer-events: none;
 }
 
@@ -1144,4 +1159,74 @@ h1.curved text {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+/* While one item is hovered, the other notes stay hidden (even ones still fading out or left open by a click) */
+@media (hover: hover) {
+  .picnic:has(.mat-item:hover) .mat-item:not(:hover) .tip {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* With a mouse, a note that has nothing to click in it lets the pointer through, so an item that sits under another
+   item's note can still be reached (and then the other note puts itself away). Only the headphones note, with its
+   album links and arrows, stays clickable. */
+@media (hover: hover) {
+  .mat-item:not(.headphones) .tip {
+    pointer-events: none !important;
+  }
+}
+
+/* a bold line at the top of a note, instead of the bottom */
+.tip-line.tip-first {
+  margin: 0 0 6px;
+}
+
+/* The About page stays one screen tall: the page itself never scrolls, the card does */
+.panel-fixed {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+}
+
+.panel-fixed .page-title,
+.panel-fixed .back-link {
+  flex: none;
+}
+
+.panel-fixed .about-card {
+  flex: 0 1 auto;
+  min-height: 0;
+  margin-bottom: 14px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Firefox has no ::-webkit-scrollbar, so it gets the plain colours instead */
+@supports not selector(::-webkit-scrollbar) {
+  .panel-fixed .about-card {
+    scrollbar-width: thin;
+    scrollbar-color: #c9b27a #efe9c4;
+  }
+}
+
+.panel-fixed .about-card::-webkit-scrollbar {
+  width: 16px;
+  -webkit-appearance: none;
+}
+
+.panel-fixed .about-card::-webkit-scrollbar-track {
+  background: #efe9c4;
+  border-left: 3px solid #33283a;
+}
+
+.panel-fixed .about-card::-webkit-scrollbar-thumb {
+  background: #c9b27a;
+  border: 3px solid #33283a;
+}
+
+/* My Art: the same cream box as the other pages, empty for now, tall enough to show where the art will go */
+.panel-fixed .art-card {
+  flex-basis: min(60vh, 460px);   /* a good tall box, shrinking only if the screen is short */
 }

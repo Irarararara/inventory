@@ -1,6 +1,6 @@
 // Keeps each note on screen, and on touch screens makes the first tap open the note and the second follow the link.
 (function () {
-  var items = Array.prototype.slice.call(document.querySelectorAll('.mat-item'));
+  var items = Array.prototype.slice.call(document.querySelectorAll('.mat-item, .pigeon-link'));
   var noHover = window.matchMedia('(hover: none)');
   var MARGIN = 8;
   var open = null;
@@ -30,9 +30,19 @@
     open = null;
   }
 
+  // only one note at a time: reaching for another item puts away any note left open by a tap or a click
+  function closeOthers(item) {
+    items.forEach(function (other) {
+      if (other === item) return;
+      other.classList.remove('is-open');
+      if (other.contains(document.activeElement)) document.activeElement.blur();
+    });
+    if (open && open !== item) open = null;
+  }
+
   items.forEach(function (item) {
-    item.addEventListener('mouseenter', function () { place(item); });
-    item.addEventListener('focusin', function () { place(item); });
+    item.addEventListener('mouseenter', function () { closeOthers(item); place(item); });
+    item.addEventListener('focusin', function () { closeOthers(item); place(item); });
     item.addEventListener('click', function (e) {
       if (!noHover.matches) return;
       if (e.target.closest && e.target.closest('.tip a')) return;   // the album link inside a note
